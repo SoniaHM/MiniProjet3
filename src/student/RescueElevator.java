@@ -68,11 +68,7 @@ public class RescueElevator implements Elevator {
 
 	@Override
 	public List<Integer> chooseNextFloors() {
-		
-		if (this.time == LocalTime.of(8, 1, 39)) {
-			System.out.println();
-		}
-		
+	
 		
 		List<Integer> desti = new ArrayList(this.nextDestinations);
 		if (!this.nextDestinations.isEmpty()) {
