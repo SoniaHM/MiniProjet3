@@ -1,5 +1,14 @@
 // SHA Zamshed and HASSUAN M'CAOURI Sonia 
 
+
+
+
+// For the building.java, please use :
+// NeedingHelpElevator elevator1 = new NeedingHelpElevator(ELEVATOR_CAPACITY, "Batman");
+// Elevator elevator2 = new RescueElevator(ELEVATOR_CAPACITY, "Robin",elevator1);
+
+
+
 package student;
 
 import java.time.LocalTime;
@@ -125,32 +134,7 @@ public class RescueElevator implements Elevator {
 		return List.of(1);
 
 		
-
-//
-//		List<Integer> Dest = another.getNextDestinations();
-//		Collections.reverse(Dest);		
-//
-//		if (Dest.equals(another.getNextDestinations())) {
-//			
-//
-//			
-//			
-//			this.nextDestinations = List.of(1);
-//			return this.nextDestinations;
-//		}
-//		
-//		
-//	
-//		
-//		this.nextDestinations = Dest;
-//		
-//		return this.nextDestinations;
 	}
-
-
-
-
-
 
 
 
@@ -291,9 +275,7 @@ public class RescueElevator implements Elevator {
 	public void newPersonWaitingAtFloor(int floor, Person person) {
 		this.peopleByFloor = another.getPeopleByFloor();
 		int indexFloor = floor - 1;
-	//	this.peopleByFloor.get(indexFloor).add(person);
-	//	this.another.getPeopleByFloor().get(indexFloor).add(person);
-
+	
 	}
 
 	@Override
