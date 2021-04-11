@@ -60,15 +60,51 @@ public class RescueElevator implements Elevator {
 	@Override
 	public List<Integer> chooseNextFloors() {
 		
+		if (this.time == LocalTime.of(8, 1, 39)) {
+			System.out.println();
+		}
 		
-		ArrayList<Integer> desti = ListToArrayList(this.nextDestinations);
+		
+		List<Integer> desti = new ArrayList(this.nextDestinations);
 		if (!this.nextDestinations.isEmpty()) {
 
 			desti.remove(0);
 			if (desti.isEmpty()) {
-//				desti.addAll(this.another.getNextDestinations());
-				this.nextDestinations = desti;
-				return List.of(1);
+				
+				int floorWithTheMostNumberOfPeople = findFloorWithTheMostNumberOfPeople();		
+				int mostNumberOfPeople = peopleByFloor.get(floorWithTheMostNumberOfPeople-1).size();
+				
+				if (mostNumberOfPeople>this.capacity) {
+					this.nextDestinations = another.getNextDestinations();
+					return this.nextDestinations;
+				}
+				
+				int secondFloorWithTheMostNumberOfPeople = findSecondFloorWithTheMostNumberOfPeople(findFloorWithTheMostNumberOfPeople());
+				if (currentFloor == secondFloorWithTheMostNumberOfPeople) {
+					int indexOfCurrentFloor = this.currentFloor - 1;
+					List<Person> waitingListForCurrentFloor = this.peopleByFloor.get(indexOfCurrentFloor);
+
+					List<Integer> PeopleDestination = ListToArrayList(findDestinationFloors(waitingListForCurrentFloor));
+					if (!PeopleDestination.isEmpty()) {
+						this.PeopleDestination = PeopleDestination;
+					}
+					this.mostRequestedFloor = mostRequestedFloors(ListToArrayList(PeopleDestination),
+							ListToArrayList(destinations2));
+
+					this.nextDestinations = this.mostRequestedFloor;
+					
+					if (this.nextDestinations.isEmpty())
+					{
+						this.nextDestinations = List.of(1);
+					}
+					return this.nextDestinations;
+
+				} else {
+					this.nextDestinations = List.of(secondFloorWithTheMostNumberOfPeople);
+					return this.nextDestinations;
+				}
+				
+
 			}
 			this.nextDestinations = desti;
 			return this.nextDestinations;
@@ -86,31 +122,29 @@ public class RescueElevator implements Elevator {
 		}
 		
 		
-		
-		
+		return List.of(1);
+
 		
 
-
-		List<Integer> Dest = another.getNextDestinations();
-		Collections.reverse(Dest);		
-		ArrayList<Integer> arrDest = ListToArrayList(Dest);
-
-		if (Dest.equals(another.getNextDestinations())) {
-			
-			
-			
-			
-			this.nextDestinations = List.of(1);
-			return this.nextDestinations;
-		}
-		
-		
-		
-		
-		
-		this.nextDestinations = arrDest;
-		
-		return this.nextDestinations;
+//
+//		List<Integer> Dest = another.getNextDestinations();
+//		Collections.reverse(Dest);		
+//
+//		if (Dest.equals(another.getNextDestinations())) {
+//			
+//
+//			
+//			
+//			this.nextDestinations = List.of(1);
+//			return this.nextDestinations;
+//		}
+//		
+//		
+//	
+//		
+//		this.nextDestinations = Dest;
+//		
+//		return this.nextDestinations;
 	}
 
 
@@ -134,6 +168,8 @@ public class RescueElevator implements Elevator {
 		}
 		return array;
 	}
+	
+	
 
 	private List<Integer> mostRequestedFloors(ArrayList<Integer> PeopleDestination, ArrayList<Integer> destinations) {
 
@@ -198,6 +234,32 @@ public class RescueElevator implements Elevator {
 		
 		return floorWithTheMostNumberOfPeople;
 	}
+	
+	private int findSecondFloorWithTheMostNumberOfPeople(int MostCrowdedFloor) {
+		int secondFloorWithTheMostNumberOfPeople = 0;
+		int MostNumberOfPeople = 0;
+		
+		if (MostCrowdedFloor > 0)
+		{
+			int MostCrowdedFloorIndex = MostCrowdedFloor - 1;
+			List<List<Person>> peopleByFloorCopy = new ArrayList(peopleByFloor);
+			peopleByFloorCopy.set(MostCrowdedFloorIndex, List.of());
+			for (int floorIndex = 0; floorIndex < peopleByFloorCopy.size(); floorIndex++) {
+				int numberOFPeopleWaiting = peopleByFloorCopy.get(floorIndex).size();
+				if (numberOFPeopleWaiting > MostNumberOfPeople) {
+					MostNumberOfPeople = numberOFPeopleWaiting;
+					secondFloorWithTheMostNumberOfPeople = floorIndex + 1;
+				}
+			}
+		}
+		if (secondFloorWithTheMostNumberOfPeople==0)
+		{
+			secondFloorWithTheMostNumberOfPeople=1;
+		}
+		
+		return secondFloorWithTheMostNumberOfPeople;
+	}
+	
 
 	private int countWaitingPeople() {
 		return peopleByFloor.stream().mapToInt(List<Person>::size).sum();
@@ -229,8 +291,8 @@ public class RescueElevator implements Elevator {
 	public void newPersonWaitingAtFloor(int floor, Person person) {
 		this.peopleByFloor = another.getPeopleByFloor();
 		int indexFloor = floor - 1;
-		this.peopleByFloor.get(indexFloor).add(person);
-		this.another.getPeopleByFloor().get(indexFloor).add(person);
+	//	this.peopleByFloor.get(indexFloor).add(person);
+	//	this.another.getPeopleByFloor().get(indexFloor).add(person);
 
 	}
 
